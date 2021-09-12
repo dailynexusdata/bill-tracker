@@ -1,0 +1,29 @@
+.labby-as-senate-styling,
+.labby-as-senate-styling * {
+  letter-spacing: normal !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+
+  h1,
+  h3,
+  p {
+    margin: 0;
+  }
+
+  h3 {
+    font-weight: 100;
+  }
+
+  a,
+  a:link,
+  a:active,
+  a:visited,
+  a:hover {
+    color: black;
+    text-decoration: none;
+  }
+  
+
+  svg {
+    align-self: center;
+  }
+}
