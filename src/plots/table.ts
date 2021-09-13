@@ -2,6 +2,7 @@ import { select } from 'd3-selection';
 import { timeFormat } from 'd3-time-format';
 
 import { getPhotoUrl } from '../utility/images';
+import makePopup from './popup';
 
 import { Bill } from '../utility/types';
 
@@ -48,16 +49,17 @@ const makeTable = (data: Array<Bill>) => {
       select(event.target).style('background-color', '#d3d3d3aa');
     })
     .on('mouseleave', (event) => {
-      trs.filter((_, i) => i % 2 === 1).style('background-color', '#d3d3d310');
+      trs.filter((_, i) => i % 2 === 1).style('background-color', '#d3d3d320');
       trs.filter((_, i) => i % 2 === 0).style('background-color', 'white');
     })
     .on('click', (event, d) => {
-      alert(
-        `${d.title}\n\n` + 'instead of this pop up it could link to the bill',
-      );
+      // alert(
+      //   `${d.title}\n\n` + 'instead of this pop up it could link to the bill',
+      // );
+      makePopup(d);
     });
 
-  trs.filter((_, i) => i % 2 === 1).style('background-color', '#d3d3d310');
+  trs.filter((_, i) => i % 2 === 1).style('background-color', '#d3d3d320');
 
   const tds = trs
     .selectAll('td')
@@ -126,12 +128,15 @@ const makeTable = (data: Array<Bill>) => {
   const colors = {
     CONSENT: '#00ff00',
     OBJECTION: '#ff0000',
+    '': '#d3d3d3',
   };
 
   tds
-    .filter((d) => d.col === 'vote' && d.val.desc !== '')
+    .filter((d) => d.col === 'vote')
+    // .filter((d) => d.col === 'vote' && d.val.desc !== '')
     .append('div')
     .style('display', 'flex')
+    .style('justify-content', 'center')
     .append('p')
     .style('padding', '7px 5px')
     .style('background-color', (d) => `${colors[d.val.desc]}33`)
@@ -139,7 +144,7 @@ const makeTable = (data: Array<Bill>) => {
     .style('font-size', '10pt')
     .text((d) => {
       console.log(d);
-      return d.val.desc;
+      return d.val.desc ? d.val.desc : 'No Vote';
     });
 };
 

@@ -9,10 +9,11 @@ import { getPhotoUrl } from '../utility/images';
 import { Bill } from '../utility/types';
 
 const makeTable = (data: Array<Bill>) => {
-  const container = select('#labby-as-bill-tracker-people-table').attr(
-    'class',
-    'labby-as-senate-styling',
-  );
+  const main = select('#labby-as-bill-tracker-people-table')
+    .attr('class', 'labby-as-senate-styling')
+    .style('position', 'relative');
+
+  const container = main.append('div');
 
   const expanded = data
     .map((d) =>
@@ -27,15 +28,13 @@ const makeTable = (data: Array<Bill>) => {
     .key((d) => d.author)
     .entries(expanded);
 
-  const table = container.append('table');
+  const table = container.append('table').style('border-collapse', 'collapse');
 
   const body = table.append('tbody');
 
-  const trs = body
-    .selectAll('tr')
-    .data(nested)
-    .enter()
-    .append('tr')
+  const trs = body.selectAll('tr').data(nested).enter().append('tr');
+
+  const tds = trs
     .selectAll('td')
     .data((d) => [
       { which: 'name', val: d.key },
@@ -45,7 +44,7 @@ const makeTable = (data: Array<Bill>) => {
     .enter()
     .append('td');
 
-  trs
+  tds
     .filter((d) => !['bills', 'img'].includes(d.which))
     .html((d) => {
       if (d.which === 'name') {
@@ -54,7 +53,7 @@ const makeTable = (data: Array<Bill>) => {
     });
   const imageSize = 50;
 
-  trs
+  tds
     .filter((d) => d.which === 'img')
     .append('div')
     .style('display', 'flex')
@@ -68,13 +67,21 @@ const makeTable = (data: Array<Bill>) => {
     .style('height', `${imageSize}px`)
     .style('border-radius', '50%');
 
+  trs
+    .filter((_, i) => i !== 0)
+    .selectAll('td')
+    .style('border-top', '1px solid #d3d3d3');
+
   const size = {
     height: 60,
     width: 200,
   };
 
-  const svgs = trs
+  const tooltip = container.append('div').style('position', 'relative');
+
+  const svgs = tds
     .filter((d) => d.which === 'bills')
+    .style('border-left', '1px solid #d3d3d3')
     .selectAll('svg')
     .data((d) => [d])
     .enter()
@@ -105,7 +112,8 @@ const makeTable = (data: Array<Bill>) => {
   console.log(x.domain(), x.range());
   const y = scaleBand()
     .domain(['Authored', 'Second Author'])
-    .range([size.height - margin.bottom, margin.top]);
+    .range([size.height - margin.bottom, margin.top])
+    .paddingOuter(0.5);
 
   svgs
     .selectAll('squares')
