@@ -74,7 +74,7 @@ const makeTable = (data: Array<Bill>) => {
 
   const size = {
     height: 60,
-    width: 200,
+    width: 150,
   };
 
   const tooltip = container.append('div').style('position', 'relative');
@@ -89,13 +89,13 @@ const makeTable = (data: Array<Bill>) => {
     .attr('height', size.height)
     .attr('width', size.width);
 
-  const squareSize = 8;
+  const squareSize = 6;
 
   const margin = {
     top: 5,
     bottom: 5,
-    right: 5,
-    left: 5,
+    right: 10,
+    left: 10,
   };
 
   const x = scaleTime()

@@ -7,12 +7,18 @@ import makePopup from './popup';
 import { Bill } from '../utility/types';
 
 const makeTable = (data: Array<Bill>) => {
-  const container = select('#labby-as-bill-tracker-bill-table').attr(
-    'class',
-    'labby-as-senate-styling',
-  );
+  const size = {
+    width: Math.min(window.innerWidth - 40, 700),
+  };
 
-  console.log(data);
+  const containerDiv = select('#labby-as-bill-tracker-bill-table')
+    .attr('class', 'labby-as-senate-styling')
+    .style('overflow-x', 'auto')
+    .style('width', `${size.width}px`);
+
+  containerDiv.selectAll('*').remove();
+
+  const container = containerDiv.append('div').style('width', '699px');
 
   const table = container.append('table').style('border-collapse', 'collapse');
 
@@ -20,11 +26,22 @@ const makeTable = (data: Array<Bill>) => {
     'title',
     'authors',
     'introduced',
-    'vote',
+    // 'vote',
     'yna',
     // 'billType',
     'latestMotion',
   ];
+
+  const headers = {
+    title: 'Title',
+    authors: 'Authors',
+    introduced: 'Date',
+    vote: '',
+    yna: 'Y/N/A',
+    latestMotion: 'Latest Motion',
+  };
+
+  // console.log('\n\n\n\n', cols, '\n\n\n\n');
 
   const ths = table
     .append('thead')
@@ -33,7 +50,7 @@ const makeTable = (data: Array<Bill>) => {
     .data(cols)
     .enter()
     .append('th')
-    .text((d) => d)
+    .text((d) => headers[d])
     .style('text-align', 'left')
     .style('padding', '5px')
     .style('border-bottom', '2px solid #d3d3d3');
@@ -79,7 +96,7 @@ const makeTable = (data: Array<Bill>) => {
     // .style('border-top', '1px solid #d3d3d322')
     .style('padding', '5px');
 
-  const formatTime = timeFormat('%b. %d');
+  const formatTime = timeFormat('%b. %-d');
   const dateLineBreak =
     '<hr style="border: 0.5px solid #d3d3d388; margin: 1px"/>';
 
@@ -89,12 +106,28 @@ const makeTable = (data: Array<Bill>) => {
       if (d.col === 'date') {
         return (
           (d.vals?.introduced
-            ? `Introduced ${formatTime(d.vals.introduced)}`
+            ? `Introduced ${
+                d.vals.vote &&
+                d.vals.introduced.getTime() === d.vals.vote.getTime()
+                  ? 'and voted on '
+                  : ''
+              }${formatTime(d.vals.introduced)}`
             : '') +
-          (d.vals.vote
+          (d.vals.vote && d.vals.introduced.getTime() !== d.vals.vote.getTime()
             ? `${dateLineBreak}Voted on ${formatTime(d.vals.vote)}`
             : '')
         );
+      }
+      if (d.col === 'title') {
+        const [, type, which, , txt] = d.val.match(
+          /(A (Bill|Resolution)( to)?) (.*)$/,
+        );
+        const lineColor = 'black'; // which === 'Bill' ? '#005AA3' : '#59A14F';
+        const style =
+          // 'text-decoration: underline;' +
+          // `text-decoration-color: ${lineColor};` +
+          `color: ${lineColor};` + 'font-style: italic;';
+        return `<p><span style='${style}'>${type}</span> ${txt}</p>`;
       }
       if (d.col === 'vote') {
         return d.val.desc;
@@ -142,10 +175,10 @@ const makeTable = (data: Array<Bill>) => {
     .style('background-color', (d) => `${colors[d.val.desc]}33`)
     .style('border-radius', '20px')
     .style('font-size', '10pt')
-    .text((d) => {
-      console.log(d);
-      return d.val.desc ? d.val.desc : 'No Vote';
-    });
+    .text((d) =>
+      // console.log(d);
+      d.val.desc ? d.val.desc : 'No Vote',
+    );
 };
 
 export default makeTable;

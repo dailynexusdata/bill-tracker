@@ -42,10 +42,9 @@ import makeSlider from '../plots/slider';
   })) as any;
 
   const resize = () => {
-    // makeHistory(bills);
     makeTable(bills);
     makePeople(bills);
-    makeSlider(bills);
+    // makeSlider(bills);
   };
 
   window.addEventListener('resize', () => {

@@ -26,6 +26,12 @@ const makePopup = (data: Bill) => {
     b.selectAll('*').remove();
     b.append('h2').text((d) => d.title);
     b.append('text').text((d) => d.authors);
+
+    /**
+     * Pop up formatting
+     *
+     */
+    console.log(b.data());
   };
 
   const popup = select('body')
