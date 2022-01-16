@@ -32,7 +32,29 @@ const makeTable = (data: Array<Bill>) => {
 
   const body = table.append('tbody');
 
+  const headers = {
+    senator: 'Senator',
+    image: ' ',
+    activity: 'Activity',
+  };
+
+  const head = table.append('thead').append('tr');
+      head.selectAll('th').data(Object.keys(headers)).enter().append('th').text((d) => headers[d])
+      .style('text-align', 'left')
+      .style('padding', '5px')
+      .style('border-bottom', '2px solid #d3d3d3')
+      // head.enter()
+      // head.append('th').text()
+
   const trs = body.selectAll('tr').data(nested).enter().append('tr');
+
+  // // console.log('\n\n\n\n', cols, '\n\n\n\n');
+
+  // const ths = table
+  //   .text((d) => headers[d])
+  //   .style('text-align', 'left')
+  //   .style('padding', '5px')
+  //   .style('border-bottom', '2px solid #d3d3d3');
 
   const tds = trs
     .selectAll('td')
