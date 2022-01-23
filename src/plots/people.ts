@@ -46,15 +46,26 @@ const makeTable = (data: Array<Bill>) => {
       // head.enter()
       // head.append('th').text()
 
-  const trs = body.selectAll('tr').data(nested).enter().append('tr');
+  const trs = body.selectAll('tr').data(nested).enter().append('tr').style('background-color', 
+  (_, i) => {
+    const isodd = i % 2 === 1
+    if (isodd){
+      return '#d3d3d320'
+    }
+    return 'white'
+  });
 
   // // console.log('\n\n\n\n', cols, '\n\n\n\n');
-
-  // const ths = table
-  //   .text((d) => headers[d])
-  //   .style('text-align', 'left')
-  //   .style('padding', '5px')
-  //   .style('border-bottom', '2px solid #d3d3d3');
+  
+  // // attempt at alt color row
+  // trs
+  //   .selectAll('tr')
+  //   .filter((_, i) => i % 2 === 1).style('background-color', '#d3d3d320')
+  //   .enter().append('tr'); 
+  // trs 
+  //   .selectAll('tr')
+  //   .filter((_, i) => i % 2 === 0).style('background-color', 'white')
+  //   .enter().append('tr');
 
   const tds = trs
     .selectAll('td')
@@ -84,10 +95,16 @@ const makeTable = (data: Array<Bill>) => {
     .data((d) => [d.val])
     .enter()
     .append('img')
-    .attr('src', (d) => getPhotoUrl(d))
     .style('width', `${imageSize}px`)
     .style('height', `${imageSize}px`)
-    .style('border-radius', '50%');
+    .style('border-radius', '50%')
+    .each(function(d){
+      this.src = getPhotoUrl(d)
+      const callback = () => {
+        this.src = getPhotoUrl('default_avatar')
+      }
+      this.addEventListener('error', callback)
+    });
 
   trs
     .filter((_, i) => i !== 0)
@@ -135,7 +152,7 @@ const makeTable = (data: Array<Bill>) => {
   const y = scaleBand()
     .domain(['Authored', 'Second Author'])
     .range([size.height - margin.bottom, margin.top])
-    .paddingOuter(0.5);
+    .paddingOuter(1);
 
   svgs
     .selectAll('squares')
