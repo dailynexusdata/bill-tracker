@@ -153,10 +153,17 @@ const makeTable = (data: Array<Bill>) => {
     .enter()
     .append('img')
     .style('margin', '3px')
-    .attr('src', (d) => getPhotoUrl(d))
     .style('width', `${imageSize}px`)
     .style('height', `${imageSize}px`)
-    .style('border-radius', '50%');
+    .style('border-radius', '50%')
+    .each(function(d){
+      this.src = getPhotoUrl(d)
+      const callback = () => {
+        this.src = getPhotoUrl('default_avatar')
+      }
+      this.addEventListener('error', callback)
+    });
+
 
   const colors = {
     CONSENT: '#00ff00',

@@ -56,16 +56,6 @@ const makeTable = (data: Array<Bill>) => {
   });
 
   // // console.log('\n\n\n\n', cols, '\n\n\n\n');
-  
-  // // attempt at alt color row
-  // trs
-  //   .selectAll('tr')
-  //   .filter((_, i) => i % 2 === 1).style('background-color', '#d3d3d320')
-  //   .enter().append('tr'); 
-  // trs 
-  //   .selectAll('tr')
-  //   .filter((_, i) => i % 2 === 0).style('background-color', 'white')
-  //   .enter().append('tr');
 
   const tds = trs
     .selectAll('td')
@@ -128,7 +118,7 @@ const makeTable = (data: Array<Bill>) => {
     .attr('height', size.height)
     .attr('width', size.width);
 
-  const squareSize = 6;
+  const squareSize = 6.4;
 
   const margin = {
     top: 5,

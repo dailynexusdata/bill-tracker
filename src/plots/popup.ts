@@ -25,8 +25,11 @@ const makePopup = (data: Bill) => {
     const b = selectAll(sel);
     b.selectAll('*').remove();
     b.append('h2').text((d) => d.title);
-    b.append('text').text((d) => d.authors);
-
+    b.append('text').text((d) => (d.authors).join(' and ')); 
+    // b.append('body').text((d) => d.link); 
+    // separate authors 
+    // add bill description 
+    
     /**
      * Pop up formatting
      *
