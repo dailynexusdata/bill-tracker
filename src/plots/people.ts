@@ -7,14 +7,15 @@ import { scaleBand, scaleTime } from 'd3-scale';
 import { getPhotoUrl } from '../utility/images';
 
 import { Bill } from '../utility/types';
+import { line } from 'd3-shape';
 
 const makeTable = (data: Array<Bill>) => {
   const main = select('#labby-as-bill-tracker-people-table')
     .attr('class', 'labby-as-senate-styling')
     .style('position', 'relative');
-
+    main.selectAll('*').remove();
   const container = main.append('div');
-
+  
   const expanded = data
     .map((d) =>
       d.authors.map((_, i) => ({
@@ -32,19 +33,24 @@ const makeTable = (data: Array<Bill>) => {
 
   const body = table.append('tbody');
 
+ // const linebreak = '<br/>'; 
+
   const headers = {
     senator: 'Senator',
     image: ' ',
-    activity: 'Activity',
+    activity: 'Author',
   };
 
   const head = table.append('thead').append('tr');
       head.selectAll('th').data(Object.keys(headers)).enter().append('th').text((d) => headers[d])
+      //   if (headers[d] = 'Author') {
+      //     return `Authored ${linebreak} Co-authored`
+      //   }
+      //   headers[d])
+      // })
       .style('text-align', 'left')
       .style('padding', '5px')
       .style('border-bottom', '2px solid #d3d3d3')
-      // head.enter()
-      // head.append('th').text()
 
   const trs = body.selectAll('tr').data(nested).enter().append('tr').style('background-color', 
   (_, i) => {
@@ -118,7 +124,7 @@ const makeTable = (data: Array<Bill>) => {
     .attr('height', size.height)
     .attr('width', size.width);
 
-  const squareSize = 6.4;
+  const squareSize = 6;
 
   const margin = {
     top: 5,

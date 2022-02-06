@@ -2,7 +2,10 @@ import { select, selectAll } from 'd3-selection';
 import { Bill } from '../utility/types';
 
 const makePopup = (data: Bill) => {
-  const popupSize = { height: 600, width: 400 };
+  const popupPadding = {left: 10, right: 10}
+  const popupSize = { height: 600, width: Math.min(600, window.innerWidth-40)-popupPadding.left-popupPadding.right};
+  // Math.min(600, window.innerWidth - 40)
+  console.log(popupSize)
 
   // const popup = select('body')
   //   .selectAll('#tooltip')
@@ -27,7 +30,6 @@ const makePopup = (data: Bill) => {
     b.append('h2').text((d) => d.title);
     b.append('text').text((d) => (d.authors).join(' and ')); 
     // b.append('body').text((d) => d.link); 
-    // separate authors 
     // add bill description 
     
     /**
@@ -46,11 +48,10 @@ const makePopup = (data: Bill) => {
           .append('div')
           .attr('id', 'tooltip')
           .style('position', 'absolute')
-          .style('left', `${window.innerWidth / 2 - popupSize.width / 2}px`)
           .style(
             'top',
             `${
-              window.innerHeight / 2 - popupSize.height / 2 + window.scrollY
+              window.innerHeight / 2 - popupSize.height / 2 + window.scrollY 
             }px`,
           )
           .style('height', `${popupSize.height}px`)
@@ -59,12 +60,11 @@ const makePopup = (data: Bill) => {
           .style('display', 'block')
           .style('border', '1px solid black')
           .style('background-color', 'white')
-          .style('padding', '10px');
+          .style('padding', `0 ${popupPadding.right}px 0 ${popupPadding.left}px`);
       },
       (update) => {
         update
           .style('display', 'block')
-          .style('left', `${window.innerWidth / 2 - popupSize.width / 2}px`)
           .style(
             'top',
             `${
@@ -74,7 +74,11 @@ const makePopup = (data: Bill) => {
           .call(makeText);
       },
     );
-
+    select('#tooltip')
+    .style('height', `${popupSize.height}px`)
+    .style('width', `${popupSize.width}px`)
+    .style('left', `${window.innerWidth / 2 - popupSize.width / 2 - popupPadding.left}px`)
+    
   document.addEventListener('scroll', () => {
     selectAll('#tooltip').style('display', 'none');
   });
