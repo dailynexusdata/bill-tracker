@@ -7,29 +7,13 @@ const makePopup = (data: Bill) => {
   // Math.min(600, window.innerWidth - 40)
   console.log(popupSize)
 
-  // const popup = select('body')
-  //   .selectAll('#tooltip')
-  //   .data([data])
-  //   .enter()
-  //   .append('div')
-  //   .attr('id', 'tooltip')
-  //   .style('position', 'absolute')
-  //   .style('left', `${window.innerWidth / 2 - popupSize.width / 2}px`)
-  //   .style(
-  //     'top',
-  //     `${window.innerHeight / 2 - popupSize.height / 2 + window.scrollY}px`,
-  //   )
-  //   .style('height', '200px')
-  //   .style('width', '200px')
-  //   .html('hello')
-  //   .style('background-color', 'red');
-
   const makeText = (sel) => {
     const b = selectAll(sel);
     b.selectAll('*').remove();
     b.append('h2').text((d) => d.title);
     b.append('text').text((d) => (d.authors).join(' and ')); 
-    // b.append('body').text((d) => d.link); 
+    // all links return google -- tbd 
+    b.append('body').text((d) => d.link); 
     // add bill description 
     
     /**

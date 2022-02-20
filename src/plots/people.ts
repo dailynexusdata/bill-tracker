@@ -33,21 +33,17 @@ const makeTable = (data: Array<Bill>) => {
 
   const body = table.append('tbody');
 
- // const linebreak = '<br/>'; 
+  const lineBreak ='<br/>';
+  // const key = `Author ${lineBreak} Second Author`
 
   const headers = {
     senator: 'Senator',
     image: ' ',
-    activity: 'Author',
+    activity: `Author ${lineBreak} co-Authored`,
   };
-
+  
   const head = table.append('thead').append('tr');
-      head.selectAll('th').data(Object.keys(headers)).enter().append('th').text((d) => headers[d])
-      //   if (headers[d] = 'Author') {
-      //     return `Authored ${linebreak} Co-authored`
-      //   }
-      //   headers[d])
-      // })
+      head.selectAll('th').data(Object.keys(headers)).enter().append('th').html((d) => headers[d])
       .style('text-align', 'left')
       .style('padding', '5px')
       .style('border-bottom', '2px solid #d3d3d3')
@@ -148,7 +144,7 @@ const makeTable = (data: Array<Bill>) => {
   const y = scaleBand()
     .domain(['Authored', 'Second Author'])
     .range([size.height - margin.bottom, margin.top])
-    .paddingOuter(1);
+    .paddingOuter(2);
 
   svgs
     .selectAll('squares')
